@@ -9,8 +9,8 @@ public class Skill {
     private String department;
     private String jobTitle;
     private boolean active;
-    
-
+    private localDate createdAt;
+    private localDate updatedAt;
     public Long getId() {
         return id;
     }
@@ -29,6 +29,10 @@ public class Skill {
     public boolean isActive() {
         return active;
     }
-
-
+    public localDate getCreatedAt() {
+        return createdAt;
+    }
+    public localDate getUpdatedAt() {
+        return updatedAt;
+    }
 }
