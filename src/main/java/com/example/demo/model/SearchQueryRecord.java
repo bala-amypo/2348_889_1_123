@@ -1,44 +1,71 @@
-package com.example.demo.Entity;
 
-import java.time.LocalDate;
+package com.example.demo.model;
 
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
-public class Searchqueryrecord {
+@Entity
+@Table(name = "search_query_records")
+public class SearchQueryRecord {
     @Id
-    private long id;
-    private long searcherld;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private Long searcherId;
+
+    @Column
     private String skillsRequested;
-    private int resultsCount;
-    private LocalDate searchedAt;
-    public long getId() {
+
+    private Integer resultsCount;
+
+    private LocalDateTime searchedAt;
+    @PrePersist
+    public void onCreate() {
+        this.searchedAt = LocalDateTime.now();
+    }
+
+    public Long getId() {
         return id;
     }
-    public void setId(long id) {
+    public void setId(Long id){
         this.id = id;
     }
-    public long getSearcherld() {
-        return searcherld;
+
+    public Long getSearcherId() {
+        return searcherId;
     }
-    public void setSearcherld(long searcherld) {
-        this.searcherld = searcherld;
+
+    public void setSearcherId(Long searcherId) {
+        this.searcherId = searcherId;
     }
+
     public String getSkillsRequested() {
         return skillsRequested;
     }
+
     public void setSkillsRequested(String skillsRequested) {
         this.skillsRequested = skillsRequested;
     }
-    public int getResultsCount() {
+
+    public Integer getResultsCount() {
         return resultsCount;
     }
-    public void setResultsCount(int resultsCount) {
+
+    public void setResultsCount(Integer resultsCount) {
         this.resultsCount = resultsCount;
     }
-    public LocalDate getSearchedAt() {
+
+    public LocalDateTime getSearchedAt() {
         return searchedAt;
     }
-    public void setSearchedAt(LocalDate searchedAt) {
-        this.searchedAt = searchedAt;
+    
+    public SearchQueryRecord() {
+    }
+
+    public SearchQueryRecord(Long id,Long searcherId, String skillsRequested, Integer resultsCount) {
+        this.id = id;
+        this.searcherId = searcherId;
+        this.skillsRequested = skillsRequested;
+        this.resultsCount = resultsCount;
     }
 }
