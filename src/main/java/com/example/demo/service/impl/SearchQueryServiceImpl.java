@@ -1,12 +1,11 @@
 
 package com.example.demo.service.impl;
 
-import java.util.*;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import com.example.demo.model.Employee;
-import com.example.demo.model.EmployeeSkill;
 import com.example.demo.model.SearchQueryRecord;
 import com.example.demo.repository.EmployeeSkillRepository;
 import com.example.demo.repository.SearchQueryRecordRepository;
@@ -50,34 +49,21 @@ public class SearchQueryServiceImpl implements SearchQueryService {
             throw new IllegalArgumentException("Skills list must not be empty");
         }
 
-        List<EmployeeSkill> activeMappings = employeeSkillRepo.findByActiveTrue();
-        Map<Long, Set<String>> employeeSkills = new HashMap<>();
-        Map<Long, Employee> employeeMap = new HashMap<>();
+        // Normalize skills - trim and convert to lowercase, remove duplicates
+        List<String> normalizedSkills = skills.stream()
+            .map(skill -> skill.trim().toLowerCase())
+            .distinct()
+            .toList();
 
-        for (EmployeeSkill es : activeMappings) {
-            Employee emp = es.getEmployee();
-            if (emp == null || emp.getId() == null) continue;
-            if (emp.getId().equals(userId)) continue;
-
-            employeeSkills
-                    .computeIfAbsent(emp.getId(), k -> new HashSet<>())
-                    .add(es.getSkill().getName());
-
-            employeeMap.put(emp.getId(), emp);
-        }
-
-        List<Employee> matchedEmployees = employeeSkills.entrySet()
-                .stream()
-                .filter(e -> e.getValue().containsAll(skills))
-                .map(e -> employeeMap.get(e.getKey()))
-                .toList();
+        List<Employee> results = employeeSkillRepo
+            .findEmployeesByAllSkillNames(normalizedSkills, (long) normalizedSkills.size());
 
         SearchQueryRecord record = new SearchQueryRecord();
-        record.setSkillsRequested(String.join(",", skills));
-        record.setResultsCount(matchedEmployees.size());
+        record.setSkillsRequested(String.join(",", normalizedSkills));
+        record.setResultsCount(results.size());
         record.setSearcherId(userId);
         saveQuery(record);
 
-        return matchedEmployees;
+        return results;
     }
 }

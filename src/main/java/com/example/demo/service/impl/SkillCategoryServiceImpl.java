@@ -25,9 +25,6 @@ public class SkillCategoryServiceImpl implements SkillCategoryService {
 
     @Override
     public SkillCategory createCategory(SkillCategory category) {
-        if (repo.existsByCategoryName(category.getCategoryName())) {
-            throw new IllegalArgumentException("Category name must be unique");
-        }
         return repo.save(category);
     }
 

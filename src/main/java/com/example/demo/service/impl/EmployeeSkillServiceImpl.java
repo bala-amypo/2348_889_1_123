@@ -3,7 +3,6 @@ package com.example.demo.service.impl;
 
 import java.util.List;
 import java.util.Set;
-import java.util.HashSet;
 
 import org.springframework.stereotype.Service;
 
@@ -80,16 +79,16 @@ public class EmployeeSkillServiceImpl implements EmployeeSkillService {
         }
 
         if (mapping.getProficiencyLevel() == null ||
-                !Set.of("BEGINNER", "INTERMEDIATE", "ADVANCED").contains(mapping.getProficiencyLevel())) {
-            throw new IllegalArgumentException("Invalid proficiency");
+                !Set.of("Beginner", "Intermediate", "Advanced", "Expert").contains(mapping.getProficiencyLevel())) {
+            throw new IllegalArgumentException("Invalid proficiency level");
         }
 
         if (employee == null || employee.getActive() != null && !employee.getActive()) {
-            throw new IllegalArgumentException("Inactive employee");
+            throw new IllegalArgumentException("Cannot create mapping for inactive employee");
         }
 
         if (skill == null || skill.getActive() != null && !skill.getActive()) {
-            throw new IllegalArgumentException("Inactive skill");
+            throw new IllegalArgumentException("Cannot create mapping for inactive skill");
         }
     }
 }

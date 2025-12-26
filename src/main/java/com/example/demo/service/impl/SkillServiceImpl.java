@@ -19,16 +19,12 @@ public class SkillServiceImpl implements SkillService {
     }
 
     @Override
-    public List<Skill> getAllSkills(boolean onlyActive) {
-        if (onlyActive) return repo.findByActiveTrue();
+    public List<Skill> getAllSkills() {
         return repo.findAll();
     }
 
     @Override
     public Skill createSkill(Skill skill) {
-        if (repo.existsByName(skill.getName())) {
-            throw new IllegalArgumentException("Skill name must be unique");
-        }
         skill.setActive(true);
         return repo.save(skill);
     }
@@ -36,15 +32,15 @@ public class SkillServiceImpl implements SkillService {
     @Override
     public Skill getSkillById(Long id) {
         return repo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Skill id not found"));
+                .orElseThrow(() -> new RuntimeException("Skill not found"));
     }
 
     @Override
     public Skill updateSkill(Long id, Skill newSkill) {
         Skill existing = getSkillById(id);
-        newSkill.setId(existing.getId());
-        newSkill.setActive(existing.getActive());
-        return repo.save(newSkill);
+        existing.setName(newSkill.getName());
+        existing.setDescription(newSkill.getDescription());
+        return repo.save(existing);
     }
 
     @Override
