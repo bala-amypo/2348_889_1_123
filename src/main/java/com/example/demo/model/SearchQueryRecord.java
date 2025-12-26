@@ -7,63 +7,40 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "search_query_records")
 public class SearchQueryRecord {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Long searcherId;
-
-    @Column
     private String skillsRequested;
-
-    private Integer resultsCount;
-
+    private Integer resultsCount = 0;
     private LocalDateTime searchedAt;
+    
     @PrePersist
     public void onCreate() {
-        this.searchedAt = LocalDateTime.now();
+        searchedAt = LocalDateTime.now();
+        if (resultsCount == null) resultsCount = 0;
     }
 
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id){
-        this.id = id;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public Long getSearcherId() {
-        return searcherId;
-    }
+    public Long getSearcherId() { return searcherId; }
+    public void setSearcherId(Long searcherId) { this.searcherId = searcherId; }
 
-    public void setSearcherId(Long searcherId) {
-        this.searcherId = searcherId;
-    }
+    public String getSkillsRequested() { return skillsRequested; }
+    public void setSkillsRequested(String skillsRequested) { this.skillsRequested = skillsRequested; }
 
-    public String getSkillsRequested() {
-        return skillsRequested;
-    }
+    public Integer getResultsCount() { return resultsCount; }
+    public void setResultsCount(Integer resultsCount) { this.resultsCount = resultsCount; }
 
-    public void setSkillsRequested(String skillsRequested) {
-        this.skillsRequested = skillsRequested;
-    }
+    public LocalDateTime getSearchedAt() { return searchedAt; }
+    public void setSearchedAt(LocalDateTime searchedAt) { this.searchedAt = searchedAt; }
 
-    public Integer getResultsCount() {
-        return resultsCount;
-    }
+    public SearchQueryRecord() {}
 
-    public void setResultsCount(Integer resultsCount) {
-        this.resultsCount = resultsCount;
-    }
-
-    public LocalDateTime getSearchedAt() {
-        return searchedAt;
-    }
-    
-    public SearchQueryRecord() {
-    }
-
-    public SearchQueryRecord(Long id,Long searcherId, String skillsRequested, Integer resultsCount) {
-        this.id = id;
+    public SearchQueryRecord(Long searcherId, String skillsRequested, Integer resultsCount) {
         this.searcherId = searcherId;
         this.skillsRequested = skillsRequested;
         this.resultsCount = resultsCount;

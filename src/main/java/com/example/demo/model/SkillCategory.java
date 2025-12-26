@@ -2,6 +2,7 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "skill_categories")
@@ -17,6 +18,20 @@ public class SkillCategory {
     private String description;
 
     private Boolean active = true;
+    
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        if (active == null) active = true;
+    }
+    
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
 
     public Long getId(){
         return id; 
@@ -42,6 +57,14 @@ public class SkillCategory {
     public void setActive(Boolean active){
         this.active = active;
     }
+    
+
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+    
     public SkillCategory() {}
 
     public SkillCategory(Long id,String categoryName, String description, Boolean active) {

@@ -1,9 +1,13 @@
 
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
+@Table(name = "skills")
 public class Skill{
     
     @Id
@@ -12,10 +16,29 @@ public class Skill{
 
     @Column(unique = true)
     private String name;
-
+    
     private String category;
+
     private String description;
     private Boolean active = true;
+    
+    @OneToMany(mappedBy = "skill", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<EmployeeSkill> employeeSkills;
+    
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        if (active == null) active = true;
+    }
+    
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
 
     public Long getId(){
         return id;
@@ -48,12 +71,20 @@ public class Skill{
         this.active = active;
     }
     
+    public List<EmployeeSkill> getEmployeeSkills() { return employeeSkills; }
+    public void setEmployeeSkills(List<EmployeeSkill> employeeSkills) { this.employeeSkills = employeeSkills; }
+    
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+    
     public Skill (){}
 
-    public Skill (Long id,String name,String category,String description,Boolean active){
+    public Skill (Long id,String name,String description,Boolean active){
         this.id = id;
         this.name = name;
-        this.category = category;
         this.description = description;
         this.active = active;
     }
