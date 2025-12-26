@@ -1,10 +1,14 @@
 
 package com.example.demo.model;
 
-import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDateTime;
+import java.util.List;
+
+import jakarta.persistence.*;
 
 @Entity
+@Table(name = "employees")
 public class Employee{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,10 +26,15 @@ public class Employee{
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    
+    @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<EmployeeSkill> employeeSkills;
 
     @PrePersist
     public void onCreate(){
         createdAt = LocalDateTime.now();
+        if (active == null) active = true;
     }
     @PreUpdate
     public void onUpdate(){
@@ -80,6 +89,9 @@ public class Employee{
     public void setUpdatedAt(LocalDateTime updatedAt){
         this.updatedAt = updatedAt;
     }
+    
+    public List<EmployeeSkill> getEmployeeSkills() { return employeeSkills; }
+    public void setEmployeeSkills(List<EmployeeSkill> employeeSkills) { this.employeeSkills = employeeSkills; }
 
     public Employee(){}
 
