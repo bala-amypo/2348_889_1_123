@@ -1,20 +1,27 @@
 
 package com.example.demo.security;
 
-import com.example.demo.model.User;
-import io.jsonwebtoken.*;
-import io.jsonwebtoken.security.Keys;
-import org.springframework.stereotype.Component;
-
-import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-@Component
-public class JwtTokenProvider {
+import javax.crypto.SecretKey;
 
-    private static final long EXPIRATION_TIME = 1000 * 60 * 60; 
+import org.springframework.stereotype.Component;
+
+import com.example.demo.model.User;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+
+@Component
+public class JwtUtil {
+
+    private static final long EXPIRATION_TIME = 1000 * 60 * 60; // 1 hour
+
     private static final String SECRET = "sdjhgbwubwwbgwiub8QFQ8qg87G1bfewifbiuwg7iu8wefqhjk";
     private static final SecretKey KEY = Keys.hmacShaKeyFor(SECRET.getBytes());
 
