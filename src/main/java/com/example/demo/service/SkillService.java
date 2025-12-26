@@ -2,6 +2,7 @@
 package com.example.demo.service;
 
 import java.util.List;
+
 import com.example.demo.model.Skill;
 
 public interface SkillService {
@@ -12,7 +13,7 @@ public interface SkillService {
 
     Skill getSkillById(Long id);
 
-    List<Skill> getAllSkills(boolean onlyActive);
+    List<Skill> getAllSkills();
 
     void deactivateSkill(Long id);
 }
